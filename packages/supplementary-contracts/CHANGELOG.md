@@ -1,5 +1,13 @@
 # Changelog
 
+## [1.1.0](https://github.com/taikoxyz/taiko-mono/compare/supplementary-contracts-v1.0.0...supplementary-contracts-v1.1.0) (2024-05-16)
+
+
+### Features
+
+* **supplementary-contracts:** allow any users to withdraw to recipient ([#17194](https://github.com/taikoxyz/taiko-mono/issues/17194)) ([2792150](https://github.com/taikoxyz/taiko-mono/commit/2792150fce8fbfa009e9dc6d83b8aeb0770a9505))
+* **supplementary-contracts:** allow changing TokenUnlocking recipient address. ([#17211](https://github.com/taikoxyz/taiko-mono/issues/17211)) ([e0f6938](https://github.com/taikoxyz/taiko-mono/commit/e0f6938ae974dd2a8c58309a60d31e24f27fcf7d))
+
 ## 1.0.0 (2024-05-14)
 
 
