@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.10.2](https://github.com/taikoxyz/taiko-mono/compare/bridge-ui-v2.10.1...bridge-ui-v2.10.2) (2024-05-16)
+
+
+### Bug Fixes
+
+* **bridge-ui:** quota check  ([#17200](https://github.com/taikoxyz/taiko-mono/issues/17200)) ([b883d34](https://github.com/taikoxyz/taiko-mono/commit/b883d34b791287d0caa58522f50917dc47f40c0e))
+
 ## [2.10.1](https://github.com/taikoxyz/taiko-mono/compare/bridge-ui-v2.10.0...bridge-ui-v2.10.1) (2024-05-13)
 
 
