@@ -3,36 +3,35 @@
 ## Introduction
 
 This document provides a comprehensive overview of the actors involved in the smart contract system and outlines their respective privileges and roles.
-Different `roles` (we call them `domain`) are granted via `AddressManager` contract's `setAddress()` function. Idea is very similar Optimism's `AddressManager` except that we use the `chainId + domainName` as the key for a given address. We need so, because for bridging purposes, the destination chain's bridge address needs to be included signaling the message hash is tamper-proof.
-Every contract which needs some role-based authentication, needs to inherit from `AddressResolver` contract, which will serve as a 'middleman/lookup' by querying the `AddressManager` per given address is allowed to act on behalf of that domain or not.
+Different `roles` (we call them `domain`) are granted via the `AddressManager` contract's `setAddress()` function. The concept is similar to Optimism's `AddressManager`, except that we use `chainId + domainName` as the key for a given address. This approach is required for bridging, as the destination chain's bridge address needs to be included with the message hash to protect against tampering. Every contract that relies on role-based authentication, will inherit its `roles` from the `AddressResolver` contract, which serves as a 'middleman/lookup' by querying the `AddressManager` to determine if a given address is allowed to act on behalf of that domain.
 
 ## 1. Domains (≈role per chainId)
 
-In the context of the smart contract system, various actors play distinct roles. Each actor is associated with specific responsibilities and privileges within the system. When there is a modifier called `onlyFromNamed` or `onlyFromNamed2`, it means we are checking access through the before mentioned contracts (`AddressResolver` and `AddressManager`), and one function maximum allows up to 2 domains (right now, but it might change when e.g.`DAO` is set up) can be given access.
+In the context of smart contracts, all actors within the system have specific roles, each with distinct responsibilities and privileges. If there are modifiers such as `onlyFromNamed` or `onlyFromNamed2`, it means access is granted based solely on the aforementioned `AddressResolver` and `AddressManager` contracts. There can be up to two domains in a single function for the purposes of granting access (although in some rare situations this could be set up in different way, such as in a `DAO`, ).
 
 ### 1.1 Taiko
 
-- **Role**: This domain role is given to TaikoL1 smart contract.
+- **Role**: Granted to the TaikoL1 smart contract.
 - **Privileges**:
-  - Possibility to mint/burn the taiko token
-  - Possibility to mint/burn erc20 tokens (I think we should remove this privilege)
+  - Mint/burn the Taiko token
+  - Mint/burn ERC20 tokens (I think this privilege needs to go)
 
 ### 1.2 Bridge
 
-- **Role**: This domain role is given to Bridge smart contracts (both chains).
+- **Role**: Granted for smart-contract bridging (on both chains)).
 - **Privileges**:
-  - The right to trigger transferring/minting the tokens (on destination chain) (be it ERC20, ERC721, ERC1155) from the vault contracts
-  - The right to trigger releasing the custodied assets on the source chain (if bridging is not successful)
+  - Trigger token minting/transfer (ERC20, ERC721, ERC1155) from vault contracts on the destination chain
+  - Trigger the release of locked assets on the source chain if the bridging process fails.
 
 ### 1.3 ERCXXX_Vault
 
-- **Role**: This role is given to respective token vault contracts (ERC20, ERC721, ERC1155)
+- **Role**: Granted to corresponding token vault contracts (ERC20, ERC721, ERC1155)
 - **Privileges**:
-  - Part of token bridging, the possibility to burn and mint the respective standard tokens (no autotelic minting/burning)
+  - Bridging, minting and burning the corresponding tokens (but no autonomous minting/burning).
 
 ## 2. Different access modifiers
 
-Beside the `onlyFromNamed` or `onlyFromNamed2` modifiers, we have others such as:
+In addition to the `onlyFromNamed` and `onlyFromNamed2` modifiers mentioned earlier, the following modifiers are available:
 
 ### 2.1 onlyOwner
 
@@ -41,26 +40,28 @@ Beside the `onlyFromNamed` or `onlyFromNamed2` modifiers, we have others such as
 
 ### 2.2 onlyAuthorized
 
-- **Description**: Only authorized (by owner) can be granted access - the address shall be a smart contract. (`Bridge` in our case)
+- **Description**: Can be granted only to owner-approved entities; the address is a smart contract (in our case, `Bridge`).
 
-## 3. Upgradeable Procedures
+## 3. Upgradable Procedures
 
-The smart contract system incorporates upgradeable procedures to ensure flexibility and security. These procedures adhere to the following principles:
+The smart contract system features upgradable procedures designed with flexibility and security in mind. These procedures are based on the following principles:
 
 ### 3.1 Deployment Scripts
 
-- Deployment scripts are visible in the `packages/protocol/scripts` folder, encompassing both deployment and upgrade scripts for easy reference and replication.
+- Deployment scripts are located in the `packages/protocol/scripts` folder. Their purpose is to facilitate deployment and maintenance, as well as provide a point of reference.
 
 ### 3.2 Transparent Upgradeability
 
-- Upgradeability is based on the Transparent Upgradeability Proxy by OpenZeppelin, ensuring that contract upgrades are secure and transparent to all stakeholders.
+Upgradeability is based on the Transparent Upgradeability Proxy by OpenZeppelin, ensuring that contract upgrades are secure and transparent to all stakeholders.
+
+- A tool called Transparent Upgradability Proxy made by OpenZeppelin helps to make sure that contract upgrades are carried out in a secure and transparent way
 
 ### 3.3 Ownership Transition
 
-- Currently, on testnets, some privileges (like `onlyOwner`) are assigned to externally owned accounts (EOAs) for easier testing. However, it is essential to note that `TimelockController` contracts will be the owners at a later stage.
+- Currently, on testnets, some privileges (such as onlyOwner) are assigned to externally owned accounts (EOAs) for easier testing. However, it's important to note that TimelockController contracts will assume ownership at a later stage.
 
 ## Conclusion
 
-Clear documentation of actors and their privileges, combined with robust upgradeable procedures, is essential for smart contract systems, especially for based rollups. This documentation ensures that all stakeholders understand their roles and responsibilities within the system and guarantees its adaptability and security over time.
+Actors and their privileges, combined with robust upgradeable procedures, is essential for products based on smart contract based, such as based rollups. Clear and unambgious documentation helps to ensure that all stakeholders understand their roles and responsibilities within the system, which promotes its adaptability and security over time.
 
-Please ensure that this document is kept up to date as changes are made to the smart contract system and its actors or privileges.
+Please help to ensure that this document is updated regularly as with relevant and up-to-date information about actors, their roles and role-based privileges.
